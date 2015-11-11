@@ -229,7 +229,11 @@ search_limit(Index, Type, Query, Limit) when is_integer(Limit) ->
 search(Params, Index, Type, Query, Opts) when is_binary(Query) ->
     erls_resource:get(
       Params, filename:join([commas(Index), Type, <<"_search">>]),
-      [], [{<<"q">>, Query}]++Opts, Params#erls_params.http_client_options).
+      [], [{<<"q">>, Query}]++Opts, Params#erls_params.http_client_options);
+search(Params, Index, Type, Query, Opts) ->
+    erls_resource:post(
+      Params, filename:join([commas(Index), Type, <<"_search">>]), 
+      [], Opts, jiffy:encode(Query), Params#erls_params.http_client_options).
 
 %%--------------------------------------------------------------------
 %% @doc
